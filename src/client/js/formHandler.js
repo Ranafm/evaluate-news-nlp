@@ -19,11 +19,12 @@ function handleSubmit(event) {
 
     getTemp(baseURL, url, API_Key)
         .then(data => {
-            console.log('here ' + data.sentimented_entity_list);
+            console.log('here ' + data.sentimented_entity_list[0]);
             postData(`${myURL}/result`, { temp: data.sentimented_entity_list })
+        }).then(() => {
+            updateUI()
+
         })
-
-
 }
 
 function postData(url = '', data = {}) {
@@ -50,8 +51,9 @@ const getTemp = async(baseURL, url, API_Key) => {
 }
 
 const updateUI = async() => {
-    const request = await fetch(`${myURL}/result`)
+    const request = await fetch(`${myURL}/res`)
     const data = await request.json();
-    document.getElementById('results').innerHTML = 'data: ' + data.sentimented_entity_list;
+    console.log(data.type + ' here print');
+    document.getElementById('results').innerHTML = `Input text: ${data.form} <br> Type: ${data.type}`;
 }
 export { handleSubmit }

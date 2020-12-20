@@ -25,15 +25,15 @@ app.listen(8081, function() {
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + "/index.html");
-    res.json(projectData)
+
 })
 
-app.post('/result', function(req, res) {
-    projectData = req.body.temp;
-    console.log(projectData);
-    // console.log(res)
+app.get('/res', function(req, res) {
     res.json(projectData)
-        // res.send(projectData + 'here')
+})
+app.post('/result', function(req, res) {
+    projectData = req.body.temp[0];
+    console.log(projectData.form + 'Type:' + projectData.type);
 })
 
 // designates what port the app will listen to for incoming requests
