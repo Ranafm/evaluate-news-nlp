@@ -11,49 +11,31 @@ function handleSubmit(event) {
 
     // check what text was put into the form field
     let url = document.getElementById('name').value
-    Client.checkForName(url)
-    console.log(API_Key);
+    Client.validateUrl(url)
+        // console.log(API_Key);
     console.log('SUCESS');
-
+    // postData(`${myURL}/result`, { temp: url })
     console.log("::: Form Submitted :::")
+    ostData(`${myURL}/result`, { temp: url })
 
-    getTemp(baseURL, url, API_Key)
-        .then(data => {
-            console.log('here ' + data.sentimented_entity_list[0]);
-            postData(`${myURL}/result`, { temp: data.sentimented_entity_list })
-        }).then(() => {
-            updateUI()
+    console.log('here --99-');
 
-        })
+
 }
+
 
 function postData(url = '', data = {}) {
+    console.log('here fetch 4');
     return fetch(url, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }).then(res => res.json())
+        .then(res => condocument.getElementById("results").innerHTML = `<br>Text: ${res.sentence_list.text} <br>Confidence: ${res.confidence}  <br>Subjectivity: ${res.subjectivity} <br>Irony: ${res.irony}`)
 }
+//document.getElementById("results").innerHTML = `<br>Text: ${res.sentence_list.text} <br>Confidence: ${res.confidence}  <br>Subjectivity: ${res.subjectivity} <br>Irony: ${res.irony}`
 
-
-const getTemp = async(baseURL, url, API_Key) => {
-    const request = await fetch(`${baseURL}?key=${API_Key}&lang=en&txt=${url}&model=general`)
-    try {
-        const retrieved = await request.json();
-        //console.log(retrieved); 
-        return retrieved
-    } catch (error) {
-        console.log('incorect code', error)
-    }
-}
-
-const updateUI = async() => {
-    const request = await fetch(`${myURL}/res`)
-    const data = await request.json();
-    console.log(data.type + ' here print');
-    document.getElementById('results').innerHTML = `Input text: ${data.form} <br> Type: ${data.type}`;
-}
 export { handleSubmit }
